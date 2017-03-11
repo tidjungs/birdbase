@@ -1,12 +1,12 @@
 import Knex from '../config/knex';
 import jwt from 'jsonwebtoken';
+import GUID from 'node-uuid';
 
 const routes = [
   {
     path: '/birds',
     method: 'GET',
     handler: (request, reply) => {
-      console.log('sss');
       Knex('birds')
       .where({ isPublic: true })
       .select('name', 'species', 'picture_url')
@@ -38,7 +38,24 @@ const routes = [
       }
     } ,
     handler: (request, reply) => {
+
       const { bird } = request.payload;
+      const guid = GUID.v4();
+
+      Knex('birds').insert({
+        owner: request.auth.credentials.scope,
+        name: bird.name,
+        species: bird.species,
+        picture_url: bird.picture_url,
+        guid,
+      }).then(res => {
+        reply({
+          data: guid,
+          message: 'successfully created bird'
+        });
+      }).catch(err => {
+        reply( 'server-side error' );
+      });
     }
   },
   {

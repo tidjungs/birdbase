@@ -9,10 +9,12 @@
   "author": "Waewprach Suthirawut <handmakersbkk@gmail.com> (https://github.com/tidjungs)",
   "license": "ISC",
   "dependencies": {
+    "hapi": "^16.1.0",
     "hapi-auth-jwt": "^4.0.0",
     "jsonwebtoken": "^7.3.0",
     "knex": "^0.12.7",
-    "mysql": "^2.13.0"
+    "mysql": "^2.13.0",
+    "node-uuid": "^1.4.7"
   },
   "devDependencies": {
     "babel-core": "^6.23.1",

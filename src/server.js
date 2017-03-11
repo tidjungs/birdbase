@@ -1,6 +1,4 @@
 import Hapi from 'hapi';
-import Knex from '../config/knex';
-import jwt from 'jsonwebtoken';
 import routes from './routes'
 
 const server = new Hapi.Server();
