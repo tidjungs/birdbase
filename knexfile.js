@@ -8,10 +8,10 @@ module.exports = {
     client: 'mysql',
     connection: {
       
-      host: '192.168.33.10',
+      host: '127.0.0.1',
 
-      user: 'birdbase',
-      password: 'password',
+      user: 'your_database_user',
+      password: 'your_database_password',
 
       database: 'birdbase',
       charset: 'utf8',
