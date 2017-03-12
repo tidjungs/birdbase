@@ -59,6 +59,65 @@ const routes = [
     }
   },
   {
+    path: '/birds/{birdGuid}',
+    method: 'PUT',
+    config: {
+      auth: {
+        strategy: 'token',
+      },
+      pre: [
+        {
+          method: (request, reply) => {
+            
+            const { birdGuid } = request.params, 
+              { scope } = request.auth.credentials;
+
+
+            Knex('birds')
+            .where({ guid: birdGuid }).select('owner').then(( [ result ] ) => {
+              
+              if (!result) {
+                reply({
+                  error: true,
+                  errMessage: `the bird with id ${ birdGuid } was not found`
+                }).takeover();
+              }
+
+              if (result.owner !== scope) {
+                reply({
+                  error: true,
+                  errMessage: `the bird with id ${birdGuid} is not in the current scope`
+                }).takeover();
+              } else {
+                return reply.continue();
+              }
+            });
+
+          }
+        }
+      ]
+    },
+    handler: (request, reply) => {
+      
+      const { birdGuid } = request.params
+          , { bird }     = request.payload;
+      
+      Knex('birds')
+      .where({ guid: birdGuid })
+      .update({ 
+        name: bird.name,
+        species: bird.species,
+        picture_url: bird.picture_url,
+        isPublic: bird.isPublic,
+      }).then(res => {
+        reply('successfully updated bird');
+      }).catch(err => {
+        reply('server-side error');
+      });
+    
+    }
+  },
+  {
     path: '/auth',
     method: 'POST',
     handler: (request, reply) => {
